@@ -1,6 +1,5 @@
---Criado juntamente com IA para estudo e como começar esse projeto... 
---SOMENTE PARA TESTE
-
+-- Criado juntamente com IA para estudo e como começar esse projeto...
+-- SOMENTE PARA TESTE
 
 -- Cria o banco de dados 'db_chatbot' se ele não existir
 CREATE DATABASE IF NOT EXISTS db_chatbot;
@@ -9,77 +8,89 @@ CREATE DATABASE IF NOT EXISTS db_chatbot;
 USE db_chatbot;
 
 -- Tabela de Usuários
--- 'id_usuario' será usado para rastrear as conversas de cada pessoa.
--- 'data_cadastro' pode ser útil para ver quando o usuário interagiu pela primeira vez.
 CREATE TABLE usuarios (
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(100),
-    email VARCHAR(100) UNIQUE,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
     data_cadastro DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Tabela de Conversas
--- Cada linha representa uma interação completa, como uma "sessão" de chat.
--- 'id_conversa' é a chave primária.
--- 'id_usuario' é a chave estrangeira que liga a conversa a um usuário específico.
--- 'data_inicio' e 'data_fim' são úteis para analisar o tempo de cada conversa.
 CREATE TABLE conversas (
     id_conversa INT PRIMARY KEY AUTO_INCREMENT,
-    id_usuario INT,
+    -- Permite conversas com usuários anônimos (não logados)
+    id_usuario INT NULL,
     data_inicio DATETIME DEFAULT CURRENT_TIMESTAMP,
     data_fim DATETIME,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+    -- Define o que acontece quando um usuário é deletado
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE SET NULL
 );
 
 -- Tabela de Mensagens
--- Armazena cada mensagem trocada entre o usuário e o chatbot.
--- 'tipo' ('usuario' ou 'bot') indica quem enviou a mensagem.
--- 'texto' é o conteúdo da mensagem.
--- 'timestamp' registra o momento exato do envio.
--- 'id_conversa' vincula a mensagem à sua conversa correspondente.
 CREATE TABLE mensagens (
     id_mensagem INT PRIMARY KEY AUTO_INCREMENT,
-    id_conversa INT,
+    id_conversa INT NOT NULL,
     tipo ENUM('usuario', 'bot') NOT NULL,
     texto TEXT NOT NULL,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_conversa) REFERENCES conversas(id_conversa)
+    -- Ao deletar uma conversa, todas as mensagens são apagadas
+    FOREIGN KEY (id_conversa) REFERENCES conversas(id_conversa) ON DELETE CASCADE
 );
 
--- Tabela Opcional: Tópicos da Conversa
--- Para uma funcionalidade mais avançada, esta tabela pode ajudar a categorizar as conversas.
--- 'nome' poderia ser 'Suporte Técnico', 'Vendas', 'Dúvidas Gerais', etc.
+-- Tabela de Tópicos (Funcionalidade Avançada)
 CREATE TABLE topicos (
     id_topico INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL UNIQUE
 );
 
 -- Tabela de ligação entre conversas e tópicos
--- Uma conversa pode ter um ou mais tópicos.
 CREATE TABLE conversa_topico (
     id_conversa INT,
     id_topico INT,
     PRIMARY KEY (id_conversa, id_topico),
-    FOREIGN KEY (id_conversa) REFERENCES conversas(id_conversa),
-    FOREIGN KEY (id_topico) REFERENCES topicos(id_topico)
+    FOREIGN KEY (id_conversa) REFERENCES conversas(id_conversa) ON DELETE CASCADE,
+    FOREIGN KEY (id_topico) REFERENCES topicos(id_topico) ON DELETE CASCADE
 );
+
+-- Tabela para coletar feedback sobre a utilidade das respostas do bot
+CREATE TABLE feedback_mensagens (
+    id_feedback INT PRIMARY KEY AUTO_INCREMENT,
+    id_mensagem INT NOT NULL,
+    avaliacao ENUM('util', 'inutil') NOT NULL,
+    comentario TEXT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    -- Garante que o feedback seja apenas para mensagens do 'bot' (requer um TRIGGER ou lógica de aplicação)
+    FOREIGN KEY (id_mensagem) REFERENCES mensagens(id_mensagem) ON DELETE CASCADE
+);
+
+
+-- Adicionar índices em colunas chave para melhorar a performance das buscas
+CREATE INDEX idx_conversas_usuario ON conversas(id_usuario);
+CREATE INDEX idx_mensagens_conversa ON mensagens(id_conversa);
+CREATE INDEX idx_feedback_mensagem ON feedback_mensagens(id_mensagem);
+
+
+-- ## SEÇÃO DE TESTES ## --
 
 -- Inserindo um novo usuário para teste
 INSERT INTO usuarios (nome, email) VALUES ('Logan', 'logan@email.com');
+SET @id_logan = LAST_INSERT_ID(); -- Armazena o ID do usuário inserido
 
--- Obtendo o ID do usuário recém-inserido (útil para a aplicação)
-SELECT LAST_INSERT_ID();
-
--- Iniciando uma nova conversa para o usuário com ID 1
-INSERT INTO conversas (id_usuario) VALUES (1);
+-- Iniciando uma nova conversa para o usuário Logan
+INSERT INTO conversas (id_usuario) VALUES (@id_logan);
+SET @id_conversa_logan = LAST_INSERT_ID(); -- Armazena o ID da conversa
 
 -- Inserindo a primeira mensagem (do usuário)
-INSERT INTO mensagens (id_conversa, tipo, texto) VALUES (1, 'usuario', 'Olá, tudo bem? Preciso de ajuda.');
+INSERT INTO mensagens (id_conversa, tipo, texto) VALUES (@id_conversa_logan, 'usuario', 'Olá, tudo bem? Preciso de ajuda.');
 
 -- Inserindo a resposta do bot
-INSERT INTO mensagens (id_conversa, tipo, texto) VALUES (1, 'bot', 'Olá, como posso te ajudar hoje?');
+INSERT INTO mensagens (id_conversa, tipo, texto) VALUES (@id_conversa_logan, 'bot', 'Olá, como posso te ajudar hoje?');
+SET @id_msg_bot = LAST_INSERT_ID(); -- Armazena o ID da mensagem do bot para o feedback
 
--- Consultando o histórico completo de uma conversa
+-- Usuário dá um feedback positivo para a resposta do bot
+INSERT INTO feedback_mensagens (id_mensagem, avaliacao) VALUES (@id_msg_bot, 'util');
+
+-- Consultando o histórico completo da conversa
 SELECT
     m.tipo AS 'Remetente',
     m.texto AS 'Mensagem',
@@ -87,11 +98,11 @@ SELECT
 FROM
     mensagens m
 WHERE
-    m.id_conversa = 1
+    m.id_conversa = @id_conversa_logan
 ORDER BY
     m.timestamp ASC;
 
 -- Encerra a conversa
 UPDATE conversas
 SET data_fim = CURRENT_TIMESTAMP
-WHERE id_conversa = 1;
+WHERE id_conversa = @id_conversa_logan;
