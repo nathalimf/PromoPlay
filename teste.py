@@ -1,17 +1,27 @@
 import requests
 import mysql.connector
+from mysql.connector import Error
 
-''' mydb = mysql.connector.connect(
-      host="localhost",  # Endereço do seu servidor MySQL
-      user="seu_usuario",
-      password="sua_senha",
-      database="seu_banco_de_dados"
-    )'''
+try:
+mydb = mysql.connector.connect(
+      host="localhost",  
+      user="usuario",
+      password="enha",
+      database="nome_do_banco_de_dados"
+    )
+    mycursor = mydb.cursor()
  
- 
-r = requests.get('https://www.cheapshark.com/api/1.0/deals?storeID=1&title=Iratus Lord of the Dead')
-                 
-print(r.text)
+ url = ('https://www.cheapshark.com/api/1.0/deals?storeID=1&title=Iratus Lord of the Dead')
+ response = requests.get(url)
+ response.raise_for_status()
+
+dados_api = response.json()
+
+if dados_api:
+      jogo = dado_api[0]
+
+      titulo = jogo.get('title')                 
+
  
 title = (r.text.title)
  
@@ -118,4 +128,5 @@ finally:
     if conexao is not None and conexao.is_connected():
         cursor.close()
         conexao.close()
+
         print("Conexão com o MySQL foi encerrada.")'''
