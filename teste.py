@@ -2,146 +2,103 @@ import requests
 import mysql.connector
 from mysql.connector import Error
 
-try:
-mydb = mysql.connector.connect(
-      host="localhost",  
-      user="usuario",
-      password="senha",
-      database="nome_do_banco_de_dados"
-    )
-    mycursor = mydb.cursor()
+db_config = {
+      'host': 'localhost',
+      'user': 'usuario',
+      'password': 'senha',
+      'database': 'db_promoplay'      
+}
  
- url = ('https://www.cheapshark.com/api/1.0/deals?storeID=1&title=Iratus Lord of the Dead')
- response = requests.get(url)
- response.raise_for_status()
+def criar_usuario(cursor, db, nome, email):
+    try:
+        sql = "INSERT INTO usuarios (nome, email) VALUES (%s, %s)"
+        valores = (nome, email)
+        cursor.execute(sql, valores)
+        db.commit()
+        id_novo_usuario = cursor.lastrowid
+        print(f"-> Usuário '{nome}' criado com sucesso! ID: {id_novo_usuario}")
+        return id_novo_usuario
+    except Error as e:
+        print(f"ERRO ao criar usuário: {e}")
+        db.rollback() # Desfaz a operação em caso de erro
+        return None
 
-dados_api = response.json()
+def iniciar_conversa(cursor, db, id_usuario):
+    """Inicia uma nova conversa para um usuário e retorna o ID da conversa."""
+    try:
+        sql = "INSERT INTO conversas (id_usuario) VALUES (%s)"
+        valores = (id_usuario,)
+        cursor.execute(sql, valores)
+        db.commit()
+        id_nova_conversa = cursor.lastrowid
+        print(f"-> Conversa iniciada para o usuário ID {id_usuario}! ID da conversa: {id_nova_conversa}")
+        return id_nova_conversa
+    except Error as e:
+        print(f"ERRO ao iniciar conversa: {e}")
+        db.rollback()
+        return None
 
-if dados_api:
-      jogo = dado_api[0]
+def enviar_mensagem(cursor, db, id_conversa, tipo, texto):
+    try:
+        sql = "INSERT INTO mensagens (id_conversa, tipo, texto) VALUES (%s, %s, %s)"
+        valores = (id_conversa, tipo, texto)
+        cursor.execute(sql, valores)
+        db.commit()
+        print(f"   - Mensagem do '{tipo}' salva: '{texto}'")
+    except Error as e:
+        print(f"ERRO ao enviar mensagem: {e}")
+        db.rollback()
 
-      titulo = jogo.get('title') 
-      preco_normal = jogo.get('normalPrice') 
-      nota_critica = jogo.get('metacriticScore')
+def buscar_historico_conversa(cursor, id_conversa):
+    try:
+        sql = "SELECT tipo, texto, timestamp FROM mensagens WHERE id_conversa = %s ORDER BY timestamp ASC"
+        valores = (id_conversa,)
+        cursor.execute(sql, valores)
+        historico = cursor.fetchall()
+        return historico
+    except Error as e:
+        print(f"ERRO ao buscar histórico: {e}")
+        return []
 
-      print(f"Jogo encontrado: {titulo}")
-      print(f"Preço normal: {preco_normal}")
-      print(f"Nota metacritic:{nota_critica}")
+if __name__ == "__main__":
+    mydb = None
+    mycursor = None
+    try:
+        mydb = mysql.connector.connect(**db_config)
+        mycursor = mydb.cursor()
+        print("✅ Conexão com o banco de dados 'db_promoplay' bem-sucedida!\n")
 
-      sql = "INSERT INTO filme (Titulo, Preco, NotadDaCritica) VALUES (%s, %s, %s)"
-      valores = (titulo, preco_normal, nota_critica)
+        print("--- PASSO 1: Criando um novo usuário ---")
+        id_usuario_logan = criar_usuario(mycursor, mydb, 'Logan', 'logan@email.com')
 
-      my cursor.execute (sql, valores)
-      mydb.commit()
+        if id_usuario_logan:
+            print("\n--- PASSO 2: Iniciando uma nova conversa ---")
+            id_conversa_logan = iniciar_conversa(mycursor, mydb, id_usuario_ana)
 
-      print(f"{mycursor.rowcount} registro inserido com sucesso!")
+            if id_conversa_logan:
+                print("\n--- PASSO 3: Trocando mensagens ---")
+                enviar_mensagem(mycursor, mydb, id_conversa_logan, 'usuario', 'Olá! Gostaria de ...')
+                
+                resposta_bot = "Olá, Logan!"
+                enviar_mensagem(mycursor, mydb, id_conversa_logan, 'bot', resposta_bot)
+                
+                enviar_mensagem(mycursor, mydb, id_conversa_logan, 'usuario', 'Sim, por favor.')
 
- 
-title = (r.text.title)
- 
-'''mycursor.execute("INSERT INTO filme (Titulo,Preco,NotaDaCritica) VALUES (title,normalPrice,metacriticScore)")'''
+                print("\n--- PASSO 4: Exibindo o histórico da conversa ---")
+                historico = buscar_historico_conversa(mycursor, id_conversa_logan)
+                
+                if historico:
+                    print("\n--- Histórico da Conversa ---")
+                    for tipo, texto, hora in historico:
+                        print(f"[{hora.strftime('%H:%M:%S')}] {tipo.capitalize()}: {texto}")
+                    print("-----------------------------\n")
 
+    except Error as e:
+        print(f"ERRO DE CONEXÃO: Não foi possível conectar ao banco de dados: {e}")
 
-
-'''import requests
-import mysql.connector
-from mysql.connector import Error
-
-# 1. Usando a biblioteca 'requests' para buscar dados de uma API
-try:
-    print("Buscando dados da API...")
-    # Faz uma requisição GET para a URL da API de teste JSONPlaceholder
-    response = requests.get('https://jsonplaceholder.typicode.com/todos/1')
-
-    # Verifica se a requisição foi bem-sucedida (código 200)
-    response.raise_for_status() 
-
-    # Converte a resposta para formato JSON (dicionário Python)
-    dados_api = response.json()
-    print("Dados recebidos com sucesso!")
-    print(f"Título da tarefa: {dados_api['title']}")
-    print("-" * 30)
-
-except requests.exceptions.RequestException as e:
-    print(f"Ocorreu um erro ao acessar a API: {e}")
-
-
-# 2. Usando 'mysql.connector' para conectar ao banco de dados
-conexao = None # Inicializa a variável de conexão
-try:
-    print("Tentando conectar ao banco de dados MySQL...")
-    conexao = mysql.connector.connect(
-        host='localhost',          # ou o IP do seu servidor de banco de dados
-        database='seu_banco_de_dados', # Nome do seu banco de dados
-        user='seu_usuario',        # Seu usuário do MySQL
-        password='sua_senha'       # Sua senha do MySQL
-    )
-
-    if conexao.is_connected():
-        db_info = conexao.get_server_info()
-        print(f"Conectado ao servidor MySQL! Versão: {db_info}")
-        
-        cursor = conexao.cursor()
-        cursor.execute("SELECT DATABASE();")
-        record = cursor.fetchone()
-        print(f"Você está conectado ao banco de dados: {record[0]}")
-
-except Error as e:
-    print(f"Ocorreu um erro ao conectar ao MySQL: {e}")
-
-finally:
-    # Garante que a conexão seja fechada ao final
-    if conexao is not None and conexao.is_connected():
-        cursor.close()
-        conexao.close()
-        print("Conexão com o MySQL foi encerrada.")'''
-
-
-
-'''import requests
-import mysql.connector
-from mysql.connector import Error
-
-# Parte 1: Busca dados de uma API (não precisa alterar nada aqui)
-try:
-    print("Buscando dados da API...")
-    response = requests.get('https://jsonplaceholder.typicode.com/todos/1')
-    response.raise_for_status() 
-    dados_api = response.json()
-    print("Dados recebidos com sucesso!")
-    print(f"Título da tarefa: {dados_api['title']}")
-    print("-" * 30)
-except requests.exceptions.RequestException as e:
-    print(f"Ocorreu um erro ao acessar a API: {e}")
-
-
-# Parte 2: Conecta ao seu banco de dados (ALTERE AS LINHAS ABAIXO)
-conexao = None
-try:
-    print("Tentando conectar ao banco de dados MySQL...")
-    conexao = mysql.connector.connect(
-        host='localhost',                  # <-- Altere aqui se necessário
-        database='meu_banco_teste',        # <-- Altere para o nome do seu banco
-        user='root',                       # <-- Altere para o seu usuário
-        password='sua_senha_secreta'       # <-- Coloque sua senha aqui
-    )
-
-    if conexao.is_connected():
-        db_info = conexao.get_server_info()
-        print(f"Conectado ao servidor MySQL! Versão: {db_info}")
-        
-        cursor = conexao.cursor()
-        cursor.execute("SELECT DATABASE();")
-        record = cursor.fetchone()
-        print(f"Você está conectado ao banco de dados: {record[0]}")
-
-except Error as e:
-    print(f"Ocorreu um erro ao conectar ao MySQL: {e}")
-
-finally:
-    if conexao is not None and conexao.is_connected():
-        cursor.close()
-        conexao.close()
-
-        print("Conexão com o MySQL foi encerrada.")'''
+    finally:
+        if mydb and mydb.is_connected():
+            mycursor.close()
+            mydb.close()
+            print("❌ Conexão com o MySQL foi encerrada.")
 
