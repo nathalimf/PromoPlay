@@ -6,7 +6,7 @@ try:
 mydb = mysql.connector.connect(
       host="localhost",  
       user="usuario",
-      password="enha",
+      password="senha",
       database="nome_do_banco_de_dados"
     )
     mycursor = mydb.cursor()
@@ -20,7 +20,21 @@ dados_api = response.json()
 if dados_api:
       jogo = dado_api[0]
 
-      titulo = jogo.get('title')                 
+      titulo = jogo.get('title') 
+      preco_normal = jogo.get('normalPrice') 
+      nota_critica = jogo.get('metacriticScore')
+
+      print(f"Jogo encontrado: {titulo}")
+      print(f"Preço normal: {preco_normal}")
+      print(f"Nota metacritic:{nota_critica}")
+
+      sql = "INSERT INTO filme (Titulo, Preco, NotadDaCritica) VALUES (%s, %s, %s)"
+      valores = (titulo, preco_normal, nota_critica)
+
+      my cursor.execute (sql, valores)
+      mydb.commit()
+
+      print(f"{mycursor.rowcount} registro inserido com sucesso!")
 
  
 title = (r.text.title)
@@ -130,3 +144,4 @@ finally:
         conexao.close()
 
         print("Conexão com o MySQL foi encerrada.")'''
+
