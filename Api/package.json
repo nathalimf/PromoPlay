@@ -1,0 +1,21 @@
+{
+  "name": "promoplay",
+  "version": "1.0.0",
+  "description": "Projeto da faculdade relacionado a criação de banco de dados e desenvolvedores Front e Back para um determinado site.",
+  "main": "Api.js",
+  "scripts": {
+    "start": "node Api.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ellenjess/PromoPlay.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ellenjess/PromoPlay/issues"
+  },
+  "homepage": "https://github.com/ellenjess/PromoPlay#readme"
+}
