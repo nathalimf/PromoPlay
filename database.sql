@@ -1,12 +1,12 @@
-CREATE DATABASE IF NOT EXISTS db_promoplay;
+CREATE DATABASE IF NOT EXISTS db_promoplay
+CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE db_promoplay;
 
-CREATE TABLE usuarios (
+CREATE TABLE IF NOT EXISTS usuarios (
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
+    senha_hash VARCHAR(255) NOT NULL,
     data_cadastro DATETIME DEFAULT CURRENT_TIMESTAMP
 );
-
-INSERT INTO usuarios (nome, email) VALUES ('Logan', 'logan@email.com');
