@@ -10,7 +10,6 @@ db_config = {
 }
 
 def hash_senha(senha_texto_puro):
-    """Gera um hash seguro da senha usando bcrypt."""
     senha_bytes = senha_texto_puro.encode('utf-8')
     sal = bcrypt.gensalt()
     senha_hash = bcrypt.hashpw(senha_bytes, sal)
@@ -79,5 +78,6 @@ if __name__ == "__main__":
             mycursor.close()
             mydb.close()
             print("\n❌ Conexão com o MySQL foi encerrada.")
+
 
 
