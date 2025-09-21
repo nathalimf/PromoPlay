@@ -4,8 +4,8 @@ from mysql.connector import Error
 
 db_config = {
     'host': 'localhost',
-    'user': 'usuario',     
-    'password': 'senha',    
+    'user': 'root',     
+    'password': 'root',    
     'database': 'db_promoplay'
 }
 
@@ -79,4 +79,5 @@ if __name__ == "__main__":
             mycursor.close()
             mydb.close()
             print("\n❌ Conexão com o MySQL foi encerrada.")
+
 
