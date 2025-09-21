@@ -17,11 +17,6 @@ def hash_senha(senha_texto_puro):
     return senha_hash.decode('utf-8')
 
 def criar_usuario(cursor, db, nome, email, senha_texto_puro):
-    """
-    Insere um novo usuário na tabela 'usuarios', com tratamento de erros
-    e hashing de senha.
-    Retorna uma tupla (sucesso: bool, mensagem: str).
-    """
     if not nome or not email or not senha_texto_puro:
         return False, "Nome, e-mail e senha não podem estar vazios."
     
@@ -84,3 +79,4 @@ if __name__ == "__main__":
             mycursor.close()
             mydb.close()
             print("\n❌ Conexão com o MySQL foi encerrada.")
+
