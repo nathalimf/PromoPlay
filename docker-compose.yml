@@ -2,25 +2,18 @@ version: '3.8'
 
 services:
   db:
-    # Imagem oficial do MySQL que será baixada
     image: mysql:8.0
-
-    # Reinicia o container automaticamente se ele parar
     restart: always
 
-    # Variáveis de ambiente para configurar o MySQL
     environment:
-      MYSQL_ROOT_PASSWORD: root  # Defina uma senha segura aqui!
-      MYSQL_DATABASE: db_promoplay # Cria o banco de dados automaticamente
+      MYSQL_ROOT_PASSWORD: root 
+      MYSQL_DATABASE: db_promoplay 
 
-    # Mapeia a porta 3306 do container para a porta 3306 da sua máquina
     ports:
       - "3306:3306"
 
-    # Garante que os dados do banco não se percam quando o container for desligado
     volumes:
       - mysql_data:/var/lib/mysql
 
-# Define o volume para persistência de dados
 volumes:
   mysql_data:
