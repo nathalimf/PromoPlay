@@ -58,7 +58,7 @@ if __name__ == "__main__":
         print(f"   Resultado para o usuário: {mensagem}")
 
         print("\n2. Cadastrando 'Joao' com o mesmo e-mail de Maria...")
-        sucesso, mensagem = criar_usuario(mycursor, mydb, 'Joao', 'maria@email.com', 'outraSenha456')
+        sucesso, mensagem = criar_usuario(mycursor, mydb, 'Joao', 'joao@email.com', 'outraSenha456')
         print(f"   Resultado para o usuário: {mensagem}")
         
         print("\n3. Cadastrando 'Logan'...")
@@ -78,6 +78,7 @@ if __name__ == "__main__":
             mycursor.close()
             mydb.close()
             print("\n❌ Conexão com o MySQL foi encerrada.")
+
 
 
 
