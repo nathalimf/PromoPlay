@@ -1,0 +1,262 @@
+/* Importa fonte bonita */
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
+/* Reset básico */
+* {
+  font-family: "Josefin Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Corpo da página */
+body {
+  background-color: #021D55; /* Azul escuro */
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: background 0.3s ease;
+}
+
+/* Cabeçalho */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 25px;
+  background: linear-gradient(-180deg, rgba(0, 15, 46, 1) 14%, rgba(2, 29, 85, 1) 100%);
+}
+
+header h1 {
+  font-size: 23px;
+  -webkit-text-stroke: 1px #0A317D; /* Borda no texto */
+  paint-order: stroke fill;
+}
+
+/* Ícone da moeda */
+#coin {
+  position: relative;
+  vertical-align: -4px;
+  left: -2px;
+}
+
+/* Área perfil */
+.perfil {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.perfil-img {
+  width: 30px;
+  height: 30px;
+  background: #ccc;
+  border-radius: 50%;
+}
+
+/* Conteúdo principal */
+.container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding: 30px;
+}
+
+/* Caixa amarela (quadro principal) */
+.search-box {
+  background-color: #FFE5B4; /* Amarelo claro */
+  color: #000;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 1000px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Barra de busca */
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: box-shadow 0.2s ease;
+}
+
+.search-bar input:focus {
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+  outline: none;
+}
+
+/* Botões (Buscar, Favoritos, Darkmode) */
+.buscar-btn,
+.favoritos-btn,
+.darkmode-btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+/* Botão Buscar */
+.buscar-btn {
+  background-color: #021D55;
+  color: #fff;
+}
+
+.buscar-btn:hover {
+  transform: scale(1.05);
+  background-color: #032c7d;
+}
+
+/* Botão Favoritos */
+.favoritos-btn {
+  background-color: #FFC300;
+  color: #021D55;
+}
+
+.favoritos-btn:hover {
+  transform: scale(1.05);
+  background-color: #FFB936;
+  color: #fff;
+}
+
+/* Botão Darkmode */
+.darkmode-btn {
+  background-color: #021D55;
+  color: #fff;
+}
+
+.darkmode-btn:hover {
+  transform: scale(1.05);
+  background-color: #032c7d;
+}
+
+/* Texto de ofertas */
+.ofertas-text {
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Grid de cards (jogos) */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+}
+
+/* Card individual do jogo */
+.card {
+  background-color: #021D55;
+  color: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  box-shadow: 0px 3px 6px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.5);
+}
+
+.card img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+/* Preço antigo */
+.price-old {
+  text-decoration: line-through;
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* Preço em oferta */
+.price-sale {
+  color: #FFC300;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Botão comprar */
+.buy-btn {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #FFC300;
+  color: #021D55;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.buy-btn:hover {
+  background: #FFB936;
+  color: #fff;
+}
+
+/* Rodapé */
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #011641;
+}
+
+/* --- Dark Mode --- */
+.dark-mode {
+  background-color: #FFC300;
+}
+
+.dark-mode .search-box {
+  background-color: #222;
+  color: #fff;
+}
+
+.dark-mode .card {
+  background-color: #333;
+}
+
+.dark-mode .buscar-btn,
+.dark-mode .darkmode-btn {
+  background-color: #444;
+  color: #fff;
+}
+
+/* Paginação */
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pagination button {
+  background: #facc15;
+  border: none;
+  padding: 8px 15px;
+  margin: 0 5px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.pagination button:hover {
+  background: #eab308;
+}
+
+.pagination span {
+  margin: 0 10px;
+  font-weight: bold;
+  color: #021D55;
+}
