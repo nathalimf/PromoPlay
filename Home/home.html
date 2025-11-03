@@ -5,15 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Promoplay</title>
 
-  <!-- FontAwesome -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS externo -->
   <link rel="stylesheet" href="home.css">
+<!-- JS externo -->
+
+
 </head>
+
 <body>
 <header>
   <h1>Promoplay <img src="https://i.postimg.cc/KvqKdbyP/image.png" alt="coin" id="coin" height="25px"></h1>
@@ -22,23 +23,30 @@
 
 <main class="container">
   <div class="search-box">
+
     <div class="search-bar">
+      <button class="voltar-btn">↩ Voltar</button>
       <input type="text" id="searchInput" placeholder="Buscar jogos">
-      <button class="buscar-btn" id="buscarBtn">Buscar</button>
+      <button class="buscar-btn">Buscar jogos</button>
       <button class="favoritos-btn" id="favoritosBtn">Favoritos ❤️</button>
       <button class="darkmode-btn" id="darkModeBtn">🌙</button>
+
     </div>
     <p class="ofertas-text" id="ofertasText">🎮 Ofertas encontradas</p>
+
     <div class="cards" id="gameList"></div>
+
     <div id="loadMoreContainer" style="text-align:center; margin-top:20px;"></div>
+
   </div>
 </main>
 
-<footer>
+<!-- rodapé -->
+ <footer>
   Dados por <a href="https://www.cheapshark.com/">Cheapshark</a>. Para mais informações, entre em contato com promoplay@gmail.com
-</footer>
+  </footer>
 
-<!-- JS externo -->
-<script src="home.js"></script>
+  <script src="home.js"></script>
+  
 </body>
 </html>
