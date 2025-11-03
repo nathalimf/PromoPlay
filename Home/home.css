@@ -60,19 +60,19 @@ header h1 {
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: start;
-  padding: 30px;
+  align-items: flex-start;
+  padding: 50px 20px;
 }
 
 /* Caixa amarela (quadro principal) */
 .search-box {
   background-color: #FFE5B4; /* Amarelo claro */
   color: #000;
-  padding: 20px;
-  border-radius: 10px;
-  width: 80%;
-  max-width: 1000px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 1200px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
   transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -80,13 +80,14 @@ header h1 {
 .search-bar {
   display: flex;
   gap: 10px;
-  margin-bottom: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .search-bar input {
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px;
+  flex: 2;
+  padding: 12px;
+  border-radius: 10px;
   border: 1px solid #ccc;
   transition: box-shadow 0.2s ease;
 }
@@ -96,16 +97,16 @@ header h1 {
   outline: none;
 }
 
-/* Botões (Buscar, Favoritos, Darkmode) */
-.buscar-btn,
-.favoritos-btn,
-.darkmode-btn {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 8px;
+/*Botões*/
+
+button{
+  flex: 1;
+  padding: 12px;  
+  border: none; 
+  border-radius: 10px;  
   font-weight: bold;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.3s ease;
+  transition: 0.2s;
 }
 
 /* Botão Buscar */
@@ -114,66 +115,55 @@ header h1 {
   color: #fff;
 }
 
-.buscar-btn:hover {
-  transform: scale(1.05);
-  background-color: #032c7d;
-}
 
-/* Botão Favoritos */
 .favoritos-btn {
   background-color: #FFC300;
   color: #021D55;
 }
 
-.favoritos-btn:hover {
-  transform: scale(1.05);
-  background-color: #FFB936;
-  color: #fff;
+.voltar-btn,
+.darkmode-btn{
+  background: #021D55;
+  color:#fff;
 }
 
-/* Botão Darkmode */
-.darkmode-btn {
-  background-color: #021D55;
-  color: #fff;
+button:hover {
+  transform: scale(1.05);
 }
 
-.darkmode-btn:hover {
-  transform: scale(1.05);
-  background-color: #032c7d;
-}
 
 /* Texto de ofertas */
 .ofertas-text {
   font-weight: bold;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 /* Grid de cards (jogos) */
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
 }
 
-/* Card individual do jogo */
 .card {
   background-color: #021D55;
   color: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 12px;
   text-align: center;
-  box-shadow: 0px 3px 6px rgba(0,0,0,0.3);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 5px 10px rgba(0,0,0,0.5);
+  box-shadow: 0px 5px 12px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  transition: 0.3;
 }
 
 .card img {
   max-width: 100%;
-  border-radius: 8px;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
 /* Preço antigo */
@@ -188,13 +178,13 @@ header h1 {
   color: #FFC300;
   font-weight: bold;
   font-size: 16px;
+  margin-bottom: 10px;
 }
 
 /* Botão comprar */
 .buy-btn {
   display: inline-block;
-  margin-top: 8px;
-  padding: 8px 12px;
+  padding: 10px 15px;
   background: #FFC300;
   color: #021D55;
   border-radius: 8px;
@@ -207,56 +197,30 @@ header h1 {
   color: #fff;
 }
 
+
+/* Dark Mode */
+.darkmode {
+  background-color: #0a0a0a;
+  color: #f0f0f0;
+}
+
+.darkmode .search-box {
+  background-color:  #1e1e1e;
+  color: #fff;
+}
+
+.darkmode .card {
+  background-color: #222;
+}
+
+.darkmode footer {
+  background: #000;
+}
+
+
 /* Rodapé */
 footer {
   text-align: center;
   padding: 20px;
   background-color: #011641;
-}
-
-/* --- Dark Mode --- */
-.dark-mode {
-  background-color: #FFC300;
-}
-
-.dark-mode .search-box {
-  background-color: #222;
-  color: #fff;
-}
-
-.dark-mode .card {
-  background-color: #333;
-}
-
-.dark-mode .buscar-btn,
-.dark-mode .darkmode-btn {
-  background-color: #444;
-  color: #fff;
-}
-
-/* Paginação */
-.pagination {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.pagination button {
-  background: #facc15;
-  border: none;
-  padding: 8px 15px;
-  margin: 0 5px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.2s ease;
-}
-
-.pagination button:hover {
-  background: #eab308;
-}
-
-.pagination span {
-  margin: 0 10px;
-  font-weight: bold;
-  color: #021D55;
 }
