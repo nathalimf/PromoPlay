@@ -323,3 +323,9 @@ header h1 {
         font-size: 3rem;
     }
 }
+
+#coin {
+  position: relative;
+  vertical-align: -4px;
+  left: -2px;
+}
