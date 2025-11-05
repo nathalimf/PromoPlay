@@ -191,6 +191,7 @@ header h1 {
     margin-bottom: 1.5rem;
     line-height: 1.2;
     margin-top: 0;
+    margin-bottom: 50px;
 }
 
 .info-subtitle {
@@ -329,3 +330,4 @@ header h1 {
   vertical-align: -4px;
   left: -2px;
 }
+
