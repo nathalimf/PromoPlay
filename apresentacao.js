@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         let nextIndex = (currentIndex + 1) % slides.length; 
         goToSlide(nextIndex);
-    }, 5000); 
+    }, 10000); 
 
     updateArrows(currentIndex);
 });
